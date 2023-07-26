@@ -3,9 +3,11 @@ package com.lucaslima.vacation.application.service;
 import com.lucaslima.vacation.application.domains.City;
 import com.lucaslima.vacation.application.domains.Period;
 import com.lucaslima.vacation.application.domains.Vacation;
+import com.lucaslima.vacation.application.domains.VacationRequest;
 import com.lucaslima.vacation.application.ports.in.CalculateVacationPeriodsUseCase;
 import com.lucaslima.vacation.application.ports.out.SearchHolidaysPort;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -18,29 +20,36 @@ import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
 
+@Service
 public class CalculateVacationPeriodsService implements CalculateVacationPeriodsUseCase {
 
     private static final int MINIMUM = 5;
     private static final int MAXIMUM_PERIODS = 3;
     private final SearchHolidaysPort searchHolidaysPort;
+    private final List<VacationRule> rules;
 
     @Autowired
-    public CalculateVacationPeriodsService(SearchHolidaysPort searchHolidaysPort) {
+    public CalculateVacationPeriodsService(SearchHolidaysPort searchHolidaysPort,
+                                           List<VacationRule> rules) {
         this.searchHolidaysPort = searchHolidaysPort;
+        this.rules = rules;
     }
 
     @Override
-    public List<Vacation> calculate(City city, LocalDate start, LocalDate end, int days, int split, int extraDays, List<DayOfWeek> workDays) {
+    public List<Vacation> calculate(VacationRequest vacationRequest) {
+
+        rules.forEach(rule -> rule.validate(vacationRequest));
 
         List<Period> periodsByRange = new ArrayList<>();
         Set<Integer> ranges = new HashSet<>();
         List<List<Integer>> combinationsList =
-                findCombinations(days + extraDays).stream()
-                        .filter(combination -> split == 0 || combination.size() == split)
+                findCombinations(vacationRequest.getDays() + vacationRequest.getExtraDays())
+                        .stream()
+                        .filter(combination -> vacationRequest.getSplit() == 0 || combination.size() == vacationRequest.getSplit())
                         .toList();
 
         combinationsList.forEach(combination -> ranges.addAll(combination));
-        ranges.forEach(range -> periodsByRange.addAll(calculate(city, start, end, range, workDays)));
+        ranges.forEach(range -> periodsByRange.addAll(calculate(vacationRequest.getCity(), vacationRequest.getStart(), vacationRequest.getEnd(), range, vacationRequest.getWorkDays())));
 
         return combinationsList
                 .stream()
@@ -53,8 +62,7 @@ public class CalculateVacationPeriodsService implements CalculateVacationPeriods
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Period> calculate(City city, LocalDate start, LocalDate end, Integer range, List<DayOfWeek> workDays) {
+    private List<Period> calculate(City city, LocalDate start, LocalDate end, Integer range, List<DayOfWeek> workDays) {
         var holidayList = this.searchHolidaysPort.search(start, end, city.getState());
         return calculate(start, end, range, holidayList, workDays);
     }
