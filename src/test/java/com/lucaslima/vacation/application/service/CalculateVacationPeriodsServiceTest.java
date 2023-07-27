@@ -1,11 +1,10 @@
 package com.lucaslima.vacation.application.service;
 
-import com.lucaslima.vacation.application.domains.City;
-import com.lucaslima.vacation.application.domains.State;
-import com.lucaslima.vacation.application.domains.VacationRequest;
+import com.lucaslima.vacation.application.domains.*;
 import com.lucaslima.vacation.application.exceptions.BrokenRuleValidationException;
 import com.lucaslima.vacation.application.ports.in.CalculateVacationPeriodsUseCase;
 import com.lucaslima.vacation.application.ports.out.SearchHolidaysPort;
+import com.lucaslima.vacation.application.service.rules.CityNullRule;
 import com.lucaslima.vacation.application.service.rules.QuantityDaysIsInvalidRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class CalculateVacationPeriodsServiceTest {
 
     @BeforeEach
     void setUp() {
-        this.calculateVacationPeriodsUseCase = new CalculateVacationPeriodsService(searchHolidaysPort, List.of(new QuantityDaysIsInvalidRule()));
+        this.calculateVacationPeriodsUseCase = new CalculateVacationPeriodsService(searchHolidaysPort, List.of(new CityNullRule(), new QuantityDaysIsInvalidRule()));
     }
 
     @Test
@@ -41,20 +40,32 @@ class CalculateVacationPeriodsServiceTest {
 
         when(this.searchHolidaysPort.search(Mockito.any(LocalDate.class), Mockito.any(LocalDate.class), Mockito.any(State.class)))
                 .thenReturn(List.of(
-                        LocalDate.of(2023, 7, 7),
-                        LocalDate.of(2023, 9, 7),
-                        LocalDate.of(2023, 10, 12),
-                        LocalDate.of(2023, 11, 2),
-                        LocalDate.of(2023, 11, 15),
-                        LocalDate.of(2023, 12, 25),
-                        LocalDate.of(2024, 1, 1),
-                        LocalDate.of(2024, 2, 12),
-                        LocalDate.of(2024, 2, 13),
-                        LocalDate.of(2024, 3, 29),
-                        LocalDate.of(2024, 3, 31),
-                        LocalDate.of(2024, 4, 21),
-                        LocalDate.of(2024, 5, 1),
-                        LocalDate.of(2024, 5, 30)));
+                        Holiday
+                                .builder()
+                                .withDate(LocalDate.of(2023, 9, 7))
+                                .withName("Independência do Brasil")
+                                .build(),
+                        Holiday
+                                .builder()
+                                .withDate(LocalDate.of(2023, 10, 12))
+                                .withName("Nossa Senhora Aparecida")
+                                .build(),
+                        Holiday
+                                .builder()
+                                .withDate(LocalDate.of(2023, 11, 2))
+                                .withName("Finados")
+                                .build(),
+                        Holiday
+                                .builder()
+                                .withDate(LocalDate.of(2023, 11, 15))
+                                .withName("Proclamação da República")
+                                .build(),
+                        Holiday
+                                .builder()
+                                .withDate(LocalDate.of(2023, 12, 25))
+                                .withName("Natal")
+                                .build()
+                ));
 
         var vacationList = calculateVacationPeriodsUseCase.calculate(
                 VacationRequest
@@ -78,17 +89,23 @@ class CalculateVacationPeriodsServiceTest {
     void givenVacationDataWithInvalidDaysWhenCalculateThenThrowsException() {
 
         assertThatThrownBy(() -> calculateVacationPeriodsUseCase.calculate(
-                VacationRequest
-                        .builder()
-                        .withCity(City.builder().withName("SAO PAULO").withState(State.SP).build())
-                        .withStart(LocalDate.now().plus(1, ChronoUnit.MONTHS))
-                        .withEnd(LocalDate.now().plus(10, ChronoUnit.MONTHS))
+                VacationRequestSupport
+                        .get()
                         .withDays(2)
-                        .withSplit(0)
-                        .withExtraDays(0)
-                        .withWorkDays(List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY))
                         .build()))
                 .isInstanceOf(BrokenRuleValidationException.class)
                 .hasMessage("Quantidade de dias informado é inválido");
+    }
+
+    @Test
+    void givenVacationDataWithCityNullWhenCalculateThenThrowsException() {
+
+        assertThatThrownBy(() -> calculateVacationPeriodsUseCase.calculate(
+                VacationRequestSupport
+                        .get()
+                        .withCity(null)
+                        .build()))
+                .isInstanceOf(BrokenRuleValidationException.class)
+                .hasMessage("Cidade deve vir preenchida!");
     }
 }

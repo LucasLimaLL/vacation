@@ -16,9 +16,9 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-class QuantityDaysIsInvalidRuleTest {
+class CityNullRuleTest {
 
-    static final VacationRule RULE = new QuantityDaysIsInvalidRule();
+    static final VacationRule RULE = new CityNullRule();
 
     @Test
     void givenVacationDataWithNoSplitWhenCalculateThenReturnVacationPeriods() {
@@ -30,14 +30,14 @@ class QuantityDaysIsInvalidRuleTest {
     }
 
     @Test
-    void givenVacationDataWithInvalidDaysWhenCalculateThenThrowsException() {
+    void givenVacationDataWithCityNullWhenCalculateThenThrowsException() {
 
         assertThatThrownBy(() -> RULE.validate(
                 VacationRequestSupport
                         .get()
-                        .withDays(2)
+                        .withCity(null)
                         .build()))
                 .isInstanceOf(BrokenRuleValidationException.class)
-                .hasMessage("Quantidade de dias informado é inválido");
+                .hasMessage("Cidade deve vir preenchida!");
     }
 }

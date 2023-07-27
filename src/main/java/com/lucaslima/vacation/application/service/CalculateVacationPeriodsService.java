@@ -1,12 +1,10 @@
 package com.lucaslima.vacation.application.service;
 
-import com.lucaslima.vacation.application.domains.City;
-import com.lucaslima.vacation.application.domains.Period;
-import com.lucaslima.vacation.application.domains.Vacation;
-import com.lucaslima.vacation.application.domains.VacationRequest;
+import com.lucaslima.vacation.application.domains.*;
 import com.lucaslima.vacation.application.ports.in.CalculateVacationPeriodsUseCase;
 import com.lucaslima.vacation.application.ports.out.SearchHolidaysPort;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -41,6 +39,11 @@ public class CalculateVacationPeriodsService implements CalculateVacationPeriods
         rules.forEach(rule -> rule.validate(vacationRequest));
 
         List<Period> periodsByRange = new ArrayList<>();
+        var holidayList = this.searchHolidaysPort.search(
+                vacationRequest.getStart(),
+                vacationRequest.getEnd(),
+                vacationRequest.getCity().getState());
+
         Set<Integer> ranges = new HashSet<>();
         List<List<Integer>> combinationsList =
                 findCombinations(vacationRequest.getDays() + vacationRequest.getExtraDays())
@@ -49,7 +52,7 @@ public class CalculateVacationPeriodsService implements CalculateVacationPeriods
                         .toList();
 
         combinationsList.forEach(combination -> ranges.addAll(combination));
-        ranges.forEach(range -> periodsByRange.addAll(calculate(vacationRequest.getCity(), vacationRequest.getStart(), vacationRequest.getEnd(), range, vacationRequest.getWorkDays())));
+        ranges.forEach(range -> periodsByRange.addAll(calculate(vacationRequest.getCity(), vacationRequest.getStart(), vacationRequest.getEnd(), range, vacationRequest.getWorkDays(), holidayList)));
 
         return combinationsList
                 .stream()
@@ -58,16 +61,16 @@ public class CalculateVacationPeriodsService implements CalculateVacationPeriods
                                 .builder()
                                 .withPeriod(periodsByRange.stream().filter(period -> combination.contains(period.getQuantity())).collect(Collectors.toList()))
                                 .withCombination(combination)
+                                .withHolidaysInPeriod(holidayList.stream().map(holiday -> holiday.getDate()).collect(Collectors.toList()))
                                 .build())
                 .collect(Collectors.toList());
     }
 
-    private List<Period> calculate(City city, LocalDate start, LocalDate end, Integer range, List<DayOfWeek> workDays) {
-        var holidayList = this.searchHolidaysPort.search(start, end, city.getState());
+    private List<Period> calculate(City city, LocalDate start, LocalDate end, Integer range, List<DayOfWeek> workDays, List<Holiday> holidayList) {
         return calculate(start, end, range, holidayList, workDays);
     }
 
-    private List<Period> calculate(LocalDate start, LocalDate end, Integer range, List<LocalDate> holidayList, List<DayOfWeek> workDays) {
+    private List<Period> calculate(LocalDate start, LocalDate end, Integer range, List<Holiday> holidayList, List<DayOfWeek> workDays) {
         List<Period> periods = new ArrayList<>();
 
         for (int i = 0; i < ChronoUnit.DAYS.between(start, end) - range; i++) {
@@ -110,8 +113,8 @@ public class CalculateVacationPeriodsService implements CalculateVacationPeriods
         return workDays.contains(date.getDayOfWeek());
     }
 
-    private boolean isHoliday(LocalDate date, List<LocalDate> holidayList) {
-        return holidayList.contains(date);
+    private boolean isHoliday(LocalDate date, List<Holiday> holidayList) {
+        return holidayList.stream().map(holiday -> holiday.getDate()).collect(Collectors.toList()).contains(date);
     }
 
     private List<List<Integer>> findCombinations(int quantityOfDays) {
