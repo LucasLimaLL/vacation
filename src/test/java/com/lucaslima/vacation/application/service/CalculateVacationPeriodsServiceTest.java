@@ -1,11 +1,12 @@
 package com.lucaslima.vacation.application.service;
 
-import com.lucaslima.vacation.application.domains.*;
+import com.lucaslima.vacation.application.domains.periods.*;
 import com.lucaslima.vacation.application.exceptions.BrokenRuleValidationException;
 import com.lucaslima.vacation.application.ports.in.CalculateVacationPeriodsUseCase;
 import com.lucaslima.vacation.application.ports.out.SearchHolidaysPort;
-import com.lucaslima.vacation.application.service.rules.CityNullRule;
-import com.lucaslima.vacation.application.service.rules.QuantityDaysIsInvalidRule;
+import com.lucaslima.vacation.application.service.periods.CalculateVacationPeriodsService;
+import com.lucaslima.vacation.application.service.periods.rules.CityNullRuleCalculatePeriods;
+import com.lucaslima.vacation.application.service.periods.rules.QuantityDaysIsInvalidRuleCalculatePeriods;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +33,7 @@ class CalculateVacationPeriodsServiceTest {
 
     @BeforeEach
     void setUp() {
-        this.calculateVacationPeriodsUseCase = new CalculateVacationPeriodsService(searchHolidaysPort, List.of(new CityNullRule(), new QuantityDaysIsInvalidRule()));
+        this.calculateVacationPeriodsUseCase = new CalculateVacationPeriodsService(searchHolidaysPort, List.of(new CityNullRuleCalculatePeriods(), new QuantityDaysIsInvalidRuleCalculatePeriods()));
     }
 
     @Test

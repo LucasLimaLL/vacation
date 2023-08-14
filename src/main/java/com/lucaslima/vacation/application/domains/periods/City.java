@@ -1,4 +1,4 @@
-package com.lucaslima.vacation.application.domains;
+package com.lucaslima.vacation.application.domains.periods;
 
 import lombok.Builder;
 import lombok.Getter;

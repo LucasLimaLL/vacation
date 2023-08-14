@@ -1,4 +1,4 @@
-package com.lucaslima.vacation.application.domains;
+package com.lucaslima.vacation.application.domains.periods;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
