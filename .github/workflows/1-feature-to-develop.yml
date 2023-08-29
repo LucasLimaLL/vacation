@@ -1,0 +1,34 @@
+name: Feature Release Workflow
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+
+jobs:
+  feature_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Checkstyle Check
+        run: mvn checkstyle:check
+
+      - name: Build and Install
+        run: mvn install
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: develop
+          head: ${{ github.ref }}
+          title: "Feature Release from ${{ github.ref }}"
+          body: "Automated feature release from ${{ github.ref }}"
