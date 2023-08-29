@@ -1,9 +1,9 @@
-name: Develop Branch Action
+name: Release Branch Action
 
 on:
   push:
     branches:
-      - 'develop'
+      - 'release*'
 
 jobs:
   build:
@@ -24,23 +24,15 @@ jobs:
           mvn install
           mvn checkstyle:check
 
-      - name: Determine Version Increment
-        id: version
-        run: |
-          version=$(git log --format=%B -n 1 ${{ github.sha }} | grep -Eo '(MAJOR|MINOR)')
-          echo "version=$version" >> $GITHUB_ENV
-
       - name: Create Pull Request
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const title = "Develop branch changes";
-            const body = "This pull request was automatically created by the Develop Branch Action.";
+            const title = "Release branch changes";
+            const body = "This pull request was automatically created by the Release Branch Action.";
             const head = github.context.ref;
-            const base = "release/v0.0.1"; // Update to your target branch
-            const version = process.env.version || 'MINOR'; // Default to MINOR
-            // Logic to increment version
+            const base = "main"; // Update to your target branch
             octokit.pulls.create({
               owner: github.context.repo.owner,
               repo: github.context.repo.repo,
