@@ -10,7 +10,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class INSSRuleTest {
 
-    private static final INSSRule INSS_RULE = new INSSRule(List.of());
+    private static final INSSRule INSS_RULE = new INSSRule(List.of(
+            Table.builder().withTax(BigDecimal.valueOf(0.075)).withStart(BigDecimal.valueOf(0)).withEnd(BigDecimal.valueOf(1302.00)).build(),
+            Table.builder().withTax(BigDecimal.valueOf(0.09)).withStart(BigDecimal.valueOf(1302.01)).withEnd(BigDecimal.valueOf(2571.28)).build(),
+            Table.builder().withTax(BigDecimal.valueOf(0.12)).withStart(BigDecimal.valueOf(2571.29)).withEnd(BigDecimal.valueOf(3856.94)).build(),
+            Table.builder().withTax(BigDecimal.valueOf(0.14)).withStart(BigDecimal.valueOf(3856.95)).withEnd(BigDecimal.valueOf(99999999.99)).build()
+    ));
 
     @Test
     void givenSalaryFirstRateWhenCalculateReturnSalaryWithPercentage() {

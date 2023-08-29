@@ -26,6 +26,7 @@ public class CalculateVacationPeriodsService implements CalculateVacationPeriods
 
     private static final int MINIMUM = 5;
     private static final int MAXIMUM_PERIODS = 3;
+    private static final int LIMIT = 5;
     private final SearchHolidaysPort searchHolidaysPort;
     private final List<CalculateVacationPeriodsRule> rules;
 
@@ -105,7 +106,7 @@ public class CalculateVacationPeriodsService implements CalculateVacationPeriods
 
         periods = periods.stream()
                 .filter(period -> period.getExtra() >= extra)
-                .limit(5)
+                .limit(LIMIT)
                 .sorted(comparing(Period::getStart))
                 .collect(Collectors.toList());
 
