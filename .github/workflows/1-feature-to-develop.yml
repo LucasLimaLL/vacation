@@ -26,13 +26,13 @@ jobs:
       - name: Build and Install
         run: mvn install
 
-      - name: Check out repository code
-        uses: actions/checkout@v2
-
-      - name: pull-request
-        uses: repo-sync/pull-request@v2
+      - name: Pull Request
+        uses: peter-evans/create-pull-request@v4
         with:
-          destination_branch: "develop"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_label: "feature, automated pr"
-          pr_title: "[Example] Simple demo"
+          commit-message: Cloud - Update available list
+          title: Cloud - Update available list
+          body: Cloud - Update available list
+          base: develop
+          labels: automated-pr, Clouds & Regions
+          branch: cloud-update-advanced-params
+          delete-branch: true
