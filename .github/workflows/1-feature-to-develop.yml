@@ -1,43 +1,36 @@
-name: Feature Branch Action
+name: Feature Release Workflow
 
 on:
   push:
     branches:
-      - 'feature*'
+      - 'feature/*'
 
 jobs:
-  build:
+  feature_release:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Java
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
-      - name: Build with Maven and Run Checkstyle
-        run: |
-          mvn install
-          mvn checkstyle:check
+      - name: Checkstyle Check
+        run: mvn checkstyle:check
+
+      - name: Build and Install
+        run: mvn install
 
       - name: Create Pull Request
-        uses: actions/github-script@v3
+        uses: peter-evans/create-pull-request@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const title = "Feature branch changes";
-            const body = "This pull request was automatically created by the Feature Branch Action.";
-            const head = github.context.ref;
-            const base = "develop";
-            octokit.pulls.create({
-              owner: github.context.repo.owner,
-              repo: github.context.repo.repo,
-              title,
-              body,
-              head,
-              base
-            });
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: develop
+          head: ${{ github.ref }}
+          title: "Feature Release from ${{ github.ref }}"
+          body: "Automated feature release from ${{ github.ref }}"
