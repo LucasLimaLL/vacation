@@ -26,6 +26,9 @@ jobs:
       - name: Build and Install
         run: mvn install
 
+      - uses: nelonoel/branch-name@v1
+        run: echo ${BRANCH_NAME}
+
       - name: Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
@@ -34,5 +37,5 @@ jobs:
           body: Cloud - Update available list
           base: develop
           labels: automated-pr, Clouds & Regions
-          branch: cloud-update-advanced-params
+          branch: $BRANCH_NAME
           delete-branch: true
