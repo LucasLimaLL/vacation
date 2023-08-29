@@ -27,10 +27,19 @@ jobs:
         run: mvn install
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+        uses: actions/github-script@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: develop
-          head: ${{ github.ref }}
-          title: "Feature Release from ${{ github.ref }}"
-          body: "Automated feature release from ${{ github.ref }}"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const title = "Feature branch changes";
+            const body = "This pull request was automatically created by the Feature Branch Action.";
+            const head = github.context.ref;
+            const base = "develop";
+            octokit.pulls.create({
+              owner: github.context.repo.owner,
+              repo: github.context.repo.repo,
+              title,
+              body,
+              head,
+              base
+            });
