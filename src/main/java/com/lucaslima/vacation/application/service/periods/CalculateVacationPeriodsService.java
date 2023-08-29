@@ -1,10 +1,13 @@
-package com.lucaslima.vacation.application.service;
+package com.lucaslima.vacation.application.service.periods;
 
-import com.lucaslima.vacation.application.domains.*;
+import com.lucaslima.vacation.application.domains.periods.City;
+import com.lucaslima.vacation.application.domains.periods.Holiday;
+import com.lucaslima.vacation.application.domains.periods.Period;
+import com.lucaslima.vacation.application.domains.periods.Vacation;
+import com.lucaslima.vacation.application.domains.periods.VacationRequest;
 import com.lucaslima.vacation.application.ports.in.CalculateVacationPeriodsUseCase;
 import com.lucaslima.vacation.application.ports.out.SearchHolidaysPort;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -23,12 +26,13 @@ public class CalculateVacationPeriodsService implements CalculateVacationPeriods
 
     private static final int MINIMUM = 5;
     private static final int MAXIMUM_PERIODS = 3;
+    private static final int LIMIT = 5;
     private final SearchHolidaysPort searchHolidaysPort;
-    private final List<VacationRule> rules;
+    private final List<CalculateVacationPeriodsRule> rules;
 
     @Autowired
     public CalculateVacationPeriodsService(SearchHolidaysPort searchHolidaysPort,
-                                           List<VacationRule> rules) {
+                                           List<CalculateVacationPeriodsRule> rules) {
         this.searchHolidaysPort = searchHolidaysPort;
         this.rules = rules;
     }
@@ -102,7 +106,7 @@ public class CalculateVacationPeriodsService implements CalculateVacationPeriods
 
         periods = periods.stream()
                 .filter(period -> period.getExtra() >= extra)
-                .limit(5)
+                .limit(LIMIT)
                 .sorted(comparing(Period::getStart))
                 .collect(Collectors.toList());
 

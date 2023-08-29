@@ -1,7 +1,7 @@
 package com.lucaslima.vacation.application.ports.in;
 
-import com.lucaslima.vacation.application.domains.Vacation;
-import com.lucaslima.vacation.application.domains.VacationRequest;
+import com.lucaslima.vacation.application.domains.periods.Vacation;
+import com.lucaslima.vacation.application.domains.periods.VacationRequest;
 
 import java.util.List;
 

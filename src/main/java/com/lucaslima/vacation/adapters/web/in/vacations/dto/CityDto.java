@@ -1,14 +1,12 @@
-package com.lucaslima.vacation.application.domains;
+package com.lucaslima.vacation.adapters.web.in.vacations.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder(toBuilder = true, setterPrefix = "with")
-public class City {
+public class CityDto {
 
     private final String name;
-    private final State state;
-
-
+    private final String state;
 }
