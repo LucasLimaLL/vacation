@@ -1,64 +1,54 @@
-name: Release Workflow
+name: Develop Branch Action
 
 on:
   push:
     branches:
-      - develop
+      - 'develop'
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven
 
-      - name: Checkstyle Check
-        run: mvn checkstyle:check
-
-      - name: Build and Install
-        run: mvn install
-
-      - name: Determine Next Release Version
-        id: release_version
+      - name: Build with Maven and Run Checkstyle
         run: |
-          current_version=$(git describe --abbrev=0 --tags)
-          version_parts=(${current_version//./ })
-          next_patch=$((version_parts[2] + 1))
-          next_version="${version_parts[0]}.${version_parts[1]}.$next_patch"
-          echo "::set-output name=next_version::$next_version"
+          mvn install
+          mvn checkstyle:check
 
-      - name: Check if release branch exists
-        id: release_branch_exists
+      - name: Determine Version Increment
+        id: version
         run: |
-          release_branch="release/v0.0.1"
-          if git show-ref --quiet refs/heads/$release_branch; then
-            echo "::set-output name=branch_exists::true"
-          else
-            echo "::set-output name=branch_exists::false"
-          fi
-
-      - name: Create Release Branch
-        if: steps.release_branch_exists.outputs.branch_exists == 'false'
-        run: |
-          next_version=${{ steps.release_version.outputs.next_version }}
-          release_branch="release/v$next_version"
-          git checkout -b $release_branch
-          git push origin $release_branch
+          version=$(git log --format=%B -n 1 ${{ github.sha }} | grep -Eo '(MAJOR|MINOR)')
+          echo "version=$version" >> $GITHUB_ENV
 
       - name: Create Pull Request
-        if: steps.release_branch_exists.outputs.branch_exists == 'false'
-        uses: peter-evans/create-pull-request@v3
+        uses: actions/github-script@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          head: release/v${{ steps.release_version.outputs.next_version }}
-          title: "Release v${{ steps.release_version.outputs.next_version }}"
-          body: "Automated release for v${{ steps.release_version.outputs.next_version }}"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const title = "Develop branch changes";
+            const body = "This pull request was automatically created by the Develop Branch Action.";
+            const head = github.context.ref;
+            const base = "release/v0.0.1"; // Update to your target branch
+            const version = process.env.version || 'MINOR'; // Default to MINOR
+            // Logic to increment version
+            octokit.pulls.create({
+              owner: github.context.repo.owner,
+              repo: github.context.repo.repo,
+              title,
+              body,
+              head,
+              base
+            });
+
+      - name: Deploy to AWS
+        # Add AWS deployment steps here

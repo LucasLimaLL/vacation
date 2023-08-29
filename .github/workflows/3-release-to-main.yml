@@ -1,9 +1,9 @@
-name: Feature Branch Action
+name: Release Branch Action
 
 on:
   push:
     branches:
-      - 'feature*'
+      - 'release*'
 
 jobs:
   build:
@@ -29,10 +29,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const title = "Feature branch changes";
-            const body = "This pull request was automatically created by the Feature Branch Action.";
+            const title = "Release branch changes";
+            const body = "This pull request was automatically created by the Release Branch Action.";
             const head = github.context.ref;
-            const base = "develop";
+            const base = "main"; // Update to your target branch
             octokit.pulls.create({
               owner: github.context.repo.owner,
               repo: github.context.repo.repo,
@@ -41,3 +41,6 @@ jobs:
               head,
               base
             });
+
+      - name: Deploy to AWS
+        # Add AWS deployment steps here
