@@ -40,7 +40,6 @@ public class CalculateVacationPeriodsController {
             @RequestParam(name = "valor_divisao") int slice,
             @RequestParam(name = "dias_trabalho") List<Integer> workDays
     ) {
-
         LocalDate startPeriod = LocalDate.parse(start, DATE_FORMATTER);
         LocalDate endPeriod = LocalDate.parse(end, DATE_FORMATTER);
 
