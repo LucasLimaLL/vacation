@@ -1,4 +1,4 @@
-Calculadora de Melhores Períodos de Férias
+Calculadora de Melhores Períodos de Férias <br/>
 Bem-vindo à Calculadora de Melhores Períodos de Férias! Esta aplicação foi criada com o objetivo de ajudar os usuários a identificar os melhores períodos para tirar férias, levando em consideração uma série de parâmetros fornecidos pelo próprio usuário. Sabemos como é importante aproveitar ao máximo os momentos de descanso, e essa ferramenta está aqui para tornar o processo de planejamento de férias mais simples e eficiente.
 
 Como Funciona
