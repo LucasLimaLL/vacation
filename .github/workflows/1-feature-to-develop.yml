@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - 'feature/*'
-
+permissions:
+  contents: write
+      
 jobs:
   feature_release:
     runs-on: ubuntu-latest
