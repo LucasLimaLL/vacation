@@ -2,8 +2,9 @@ package com.lucaslima.vacation.configuration.configuration;
 
 import com.lucaslima.vacation.application.ports.in.CalculateVacationPeriodsUseCase;
 import com.lucaslima.vacation.application.ports.out.SearchHolidaysPort;
-import com.lucaslima.vacation.application.service.payments.rule.INSSRule;
-import com.lucaslima.vacation.application.service.payments.rule.Table;
+import com.lucaslima.vacation.application.service.payments.rule.deductions.INSSRule;
+import com.lucaslima.vacation.application.service.payments.rule.deductions.IRRFRule;
+import com.lucaslima.vacation.application.service.payments.rule.deductions.Table;
 import com.lucaslima.vacation.application.service.periods.CalculateVacationPeriodsService;
 import com.lucaslima.vacation.application.service.periods.CalculateVacationPeriodsRule;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +39,23 @@ public class VacationAppConfiguration {
                 })
                 .collect(Collectors.toList());
         return new INSSRule(list);
+    }
+
+    @Bean
+    public IRRFRule irrfRule(@Value("#{'${irrf.table}'.split(',')}") String[] irrfValues) {
+        var list = Arrays
+                .stream(irrfValues)
+                .map(table -> {
+                    String[] values = table.split("\\|");
+                    return Table
+                            .builder()
+                            .withStart(BigDecimal.valueOf(Double.valueOf(values[0])))
+                            .withEnd(BigDecimal.valueOf(Double.valueOf(values[1])))
+                            .withTax(BigDecimal.valueOf(Double.valueOf(values[2])))
+                            .build();
+                })
+                .collect(Collectors.toList());
+        return new IRRFRule(list);
     }
 
 }

@@ -11,12 +11,23 @@ public class CalculateVacationPaymentService implements CalculateVacationPayment
     private List<CalculateVacationPaymentRule> rules;
 
     @Override
-    public VacationPayment calculate(BigDecimal salary, Integer quantityDays) {
+    public VacationPayment calculate(BigDecimal salary,
+                                     Integer quantityDays,
+                                     BigDecimal averageValue,
+                                     Integer dependents,
+                                     boolean cashAllowance,
+                                     BigDecimal alimony,
+                                     boolean salaryAdvance) {
 
         var vacationPayment = VacationPayment
                 .builder()
                 .withSalary(salary)
                 .withQuantityDays(quantityDays)
+                .withAverageValue(averageValue)
+                .withDependents(dependents)
+                .withCashAllowance(cashAllowance)
+                .withAlimony(alimony)
+                .withSalaryAdvance(salaryAdvance)
                 .build();
 
         rules.forEach(rule -> rule.validate(vacationPayment));

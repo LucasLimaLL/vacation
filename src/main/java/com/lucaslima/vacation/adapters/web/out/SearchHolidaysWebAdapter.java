@@ -44,6 +44,8 @@ public class SearchHolidaysWebAdapter implements SearchHolidaysPort {
                 .map(year -> this.searchHolidaysOpenFeign.getHolidays(year, token, state.getName()))
                 .flatMap(holidays -> holidays.stream())
                 .map(holiday -> SearchHolidayMapper.toDomain(holiday))
+                .filter(holiday -> start.isBefore(holiday.getDate()))
+                .filter(holiday -> end.isAfter(holiday.getDate()))
                 .collect(Collectors.toList());
     }
 }

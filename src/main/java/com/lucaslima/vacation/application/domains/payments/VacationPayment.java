@@ -14,6 +14,12 @@ public class VacationPayment {
 
     private final BigDecimal salary;
     private final Integer quantityDays;
+    private final BigDecimal averageValue;
+    private final Integer dependents;
+    private final boolean cashAllowance;
+    private final BigDecimal alimony;
+    private final boolean salaryAdvance;
+
     @Builder.Default
     private List<Payment> deductions = new ArrayList<>();
 

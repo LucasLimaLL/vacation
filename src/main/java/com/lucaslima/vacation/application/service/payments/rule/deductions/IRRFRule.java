@@ -1,4 +1,4 @@
-package com.lucaslima.vacation.application.service.payments.rule;
+package com.lucaslima.vacation.application.service.payments.rule.deductions;
 
 import com.lucaslima.vacation.application.domains.payments.Payment;
 import com.lucaslima.vacation.application.domains.payments.VacationPayment;
@@ -10,8 +10,8 @@ import java.util.List;
 
 
 @AllArgsConstructor
-public class INSSRule extends CalculateVacationPaymentRule {
-    private static final String INSS = "INSS";
+public class IRRFRule extends CalculateVacationPaymentRule {
+    private static final String IRRF = "IRRF";
     private final List<Table> tables;
 
 
@@ -19,7 +19,7 @@ public class INSSRule extends CalculateVacationPaymentRule {
     protected void include(VacationPayment vacationPayment) {
         vacationPayment.getDeductions().add(Payment
                 .builder()
-                .withName(INSS)
+                .withName(IRRF)
                 .withValue(vacationPayment.getSalary().multiply(getValue(vacationPayment)))
                 .build());
     }

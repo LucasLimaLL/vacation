@@ -6,5 +6,11 @@ import java.math.BigDecimal;
 
 public interface CalculateVacationPaymentUseCase {
 
-    VacationPayment calculate(BigDecimal salary, Integer quantityDays);
+    VacationPayment calculate(BigDecimal salary,
+                              Integer quantityDays,
+                              BigDecimal averageValue,
+                              Integer dependents,
+                              boolean cashAllowance,
+                              BigDecimal alimony,
+                              boolean salaryAdvance);
 }

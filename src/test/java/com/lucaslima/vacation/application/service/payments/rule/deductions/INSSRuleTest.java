@@ -1,6 +1,8 @@
-package com.lucaslima.vacation.application.service.payments.rule;
+package com.lucaslima.vacation.application.service.payments.rule.deductions;
 
 import com.lucaslima.vacation.application.domains.payments.VacationPaymentSupport;
+import com.lucaslima.vacation.application.service.payments.rule.deductions.INSSRule;
+import com.lucaslima.vacation.application.service.payments.rule.deductions.Table;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package com.lucaslima.vacation.application.service.payments.rule;
+package com.lucaslima.vacation.application.service.payments.rule.deductions;
 
 import lombok.Builder;
 import lombok.Getter;
