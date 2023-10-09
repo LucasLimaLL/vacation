@@ -32,7 +32,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          base: develop
+          target: develop
           head: ${{ github.ref }}
           title: "Feature Release from ${{ github.ref }}"
           body: "Automated feature release from ${{ github.ref }}"

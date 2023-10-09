@@ -1,7 +1,7 @@
 package com.lucaslima.vacation.adapters.web.out.feign.mapper;
 
 import com.lucaslima.vacation.adapters.web.out.feign.dto.HolidayDto;
-import com.lucaslima.vacation.application.domains.periods.Holiday;
+import com.lucaslima.vacation.application.domains.Holiday;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

@@ -1,11 +1,11 @@
 package com.lucaslima.vacation.application.ports.in;
 
-import com.lucaslima.vacation.application.domains.periods.Vacation;
-import com.lucaslima.vacation.application.domains.periods.VacationRequest;
+import com.lucaslima.vacation.application.domains.Vacation;
+import com.lucaslima.vacation.application.domains.Request;
 
 import java.util.List;
 
 public interface CalculateVacationPeriodsUseCase {
 
-    List<Vacation> calculate(VacationRequest vacationRequest);
+    List<Vacation> calculate(Request request);
 }

@@ -1,7 +1,7 @@
 package com.lucaslima.vacation.adapters.web.in.vacations.dto.mapper;
 
 import com.lucaslima.vacation.adapters.web.in.vacations.dto.PeriodDto;
-import com.lucaslima.vacation.application.domains.periods.Period;
+import com.lucaslima.vacation.application.domains.Period;
 
 import java.util.List;
 

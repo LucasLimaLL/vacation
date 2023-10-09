@@ -1,12 +1,13 @@
-package com.lucaslima.vacation.application.service.periods;
+package com.lucaslima.vacation.application.service;
 
-import com.lucaslima.vacation.application.domains.periods.City;
-import com.lucaslima.vacation.application.domains.periods.Holiday;
-import com.lucaslima.vacation.application.domains.periods.Period;
-import com.lucaslima.vacation.application.domains.periods.Vacation;
-import com.lucaslima.vacation.application.domains.periods.VacationRequest;
+import com.lucaslima.vacation.application.domains.City;
+import com.lucaslima.vacation.application.domains.Holiday;
+import com.lucaslima.vacation.application.domains.Period;
+import com.lucaslima.vacation.application.domains.Vacation;
+import com.lucaslima.vacation.application.domains.Request;
 import com.lucaslima.vacation.application.ports.in.CalculateVacationPeriodsUseCase;
 import com.lucaslima.vacation.application.ports.out.SearchHolidaysPort;
+import com.lucaslima.vacation.application.service.rules.CalculateVacationPeriodsRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,25 +39,25 @@ public class CalculateVacationPeriodsService implements CalculateVacationPeriods
     }
 
     @Override
-    public List<Vacation> calculate(VacationRequest vacationRequest) {
+    public List<Vacation> calculate(Request request) {
 
-        rules.forEach(rule -> rule.validate(vacationRequest));
+        rules.forEach(rule -> rule.validate(request));
 
         List<Period> periodsByRange = new ArrayList<>();
         var holidayList = this.searchHolidaysPort.search(
-                vacationRequest.getStart(),
-                vacationRequest.getEnd(),
-                vacationRequest.getCity().getState());
+                request.getStart(),
+                request.getEnd(),
+                request.getCity().getState());
 
         Set<Integer> ranges = new HashSet<>();
         List<List<Integer>> combinationsList =
-                findCombinations(vacationRequest.getDays() + vacationRequest.getExtraDays())
+                findCombinations(request.getDays() + request.getExtraDays())
                         .stream()
-                        .filter(combination -> vacationRequest.getSplit() == 0 || combination.size() == vacationRequest.getSplit())
+                        .filter(combination -> request.getSplit() == 0 || combination.size() == request.getSplit())
                         .toList();
 
         combinationsList.forEach(combination -> ranges.addAll(combination));
-        ranges.forEach(range -> periodsByRange.addAll(calculate(vacationRequest.getCity(), vacationRequest.getStart(), vacationRequest.getEnd(), range, vacationRequest.getWorkDays(), holidayList)));
+        ranges.forEach(range -> periodsByRange.addAll(calculate(request.getCity(), request.getStart(), request.getEnd(), range, request.getWorkDays(), holidayList)));
 
         return combinationsList
                 .stream()

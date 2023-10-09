@@ -1,9 +1,7 @@
 package com.lucaslima.vacation.application.service.rules;
 
-import com.lucaslima.vacation.application.domains.periods.VacationRequestSupport;
+import com.lucaslima.vacation.application.domains.VacationRequestSupport;
 import com.lucaslima.vacation.application.exceptions.BrokenRuleValidationException;
-import com.lucaslima.vacation.application.service.periods.CalculateVacationPeriodsRule;
-import com.lucaslima.vacation.application.service.periods.rules.CityNullRuleCalculatePeriods;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
