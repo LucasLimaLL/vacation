@@ -32,11 +32,8 @@ jobs:
         id: branch-base
         run: echo "A branch atual é ${GITHUB_REF#refs/heads/}"
 
-      - name: Criar PR
-        uses: peter-evans/create-pull-request@v5
+      - name: Create pull request
+        uses: devops-infra/action-pull-request@v0.5.5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ GITHUB_REF#refs/heads/ }}
-          base: develop
-          title: Título do Pull Request
-          body: Descrição do Pull Request
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          title: Automatic pull request
