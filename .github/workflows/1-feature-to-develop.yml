@@ -36,7 +36,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ steps.branch-base.outputs.result }}
+          branch: ${GITHUB_REF#refs/heads/}
           base: develop
           title: Título do Pull Request
           body: Descrição do Pull Request
