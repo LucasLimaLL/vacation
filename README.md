@@ -15,6 +15,12 @@ Instalação: Para usar a Calculadora de Melhores Períodos de Férias, não é 
 
 Entrada de Parâmetros: Siga as instruções na tela para inserir suas preferências. Quanto mais informações precisas você fornecer, mais precisas serão as recomendações.
 
+CURL:
+curl --request GET \
+--url 'http://localhost:8080/vacation?cidade=SaoPaulo&estado=SP&inicio_periodo=2023-09-01&fim_periodo=2024-07-10&qtd_dias=25&valor_divisao=2&dias_trabalho=1&dias_trabalho=2&dias_trabalho=3&dias_trabalho=4&dias_trabalho=5&dias_trabalho=6' \
+--header 'accept: */*'
+
+
 Resultados: Após inserir todos os parâmetros, clique em "Calcular" ou botão equivalente. Em seguida, você verá uma lista de melhores períodos de férias, cada um acompanhado por uma explicação dos motivos por trás da recomendação.
 
 Exploração Adicional: Sinta-se à vontade para ajustar diferentes parâmetros e ver como isso afeta os resultados. Você pode experimentar com datas diferentes, orçamentos variados e destinos alternativos para encontrar a combinação perfeita.
