@@ -1,12 +1,15 @@
 package com.lucaslima.vacation.application.service;
 
-import com.lucaslima.vacation.application.domains.periods.*;
+import com.lucaslima.vacation.application.domains.City;
+import com.lucaslima.vacation.application.domains.Holiday;
+import com.lucaslima.vacation.application.domains.Request;
+import com.lucaslima.vacation.application.domains.State;
+import com.lucaslima.vacation.application.domains.VacationRequestSupport;
 import com.lucaslima.vacation.application.exceptions.BrokenRuleValidationException;
 import com.lucaslima.vacation.application.ports.in.CalculateVacationPeriodsUseCase;
 import com.lucaslima.vacation.application.ports.out.SearchHolidaysPort;
-import com.lucaslima.vacation.application.service.periods.CalculateVacationPeriodsService;
-import com.lucaslima.vacation.application.service.periods.rules.CityNullRuleCalculatePeriods;
-import com.lucaslima.vacation.application.service.periods.rules.QuantityDaysIsInvalidRuleCalculatePeriods;
+import com.lucaslima.vacation.application.service.rules.CityNullRuleCalculatePeriods;
+import com.lucaslima.vacation.application.service.rules.QuantityDaysIsInvalidRuleCalculatePeriods;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,7 +72,7 @@ class CalculateVacationPeriodsServiceTest {
                 ));
 
         var vacationList = calculateVacationPeriodsUseCase.calculate(
-                VacationRequest
+                Request
                         .builder()
                         .withCity(City.builder().withName("SAO PAULO").withState(State.SP).build())
                         .withStart(LocalDate.now().plus(1, ChronoUnit.MONTHS))

@@ -2,8 +2,8 @@ package com.lucaslima.vacation.adapters.web.out;
 
 import com.lucaslima.vacation.adapters.web.out.feign.SearchHolidaysOpenFeign;
 import com.lucaslima.vacation.adapters.web.out.feign.mapper.SearchHolidayMapper;
-import com.lucaslima.vacation.application.domains.periods.Holiday;
-import com.lucaslima.vacation.application.domains.periods.State;
+import com.lucaslima.vacation.application.domains.Holiday;
+import com.lucaslima.vacation.application.domains.State;
 import com.lucaslima.vacation.application.ports.out.SearchHolidaysPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

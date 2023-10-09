@@ -1,4 +1,4 @@
-package com.lucaslima.vacation.application.domains.periods;
+package com.lucaslima.vacation.application.domains;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.lucaslima.vacation.adapters.web.out;
 
 import com.lucaslima.vacation.adapters.web.out.feign.SearchHolidaysOpenFeign;
 import com.lucaslima.vacation.adapters.web.out.support.HolidayDtoSupport;
-import com.lucaslima.vacation.application.domains.periods.State;
+import com.lucaslima.vacation.application.domains.State;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

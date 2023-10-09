@@ -5,8 +5,8 @@ import com.lucaslima.vacation.adapters.web.in.vacations.dto.CalculateVacationPer
 import com.lucaslima.vacation.adapters.web.in.shared.dto.DataWrapper;
 import com.lucaslima.vacation.adapters.web.in.vacations.dto.mapper.CalculateVacationPeriodsMapper;
 import com.lucaslima.vacation.adapters.web.in.vacations.dto.mapper.VacationRequestDomainMapper;
-import com.lucaslima.vacation.application.domains.periods.Vacation;
-import com.lucaslima.vacation.application.domains.periods.VacationRequest;
+import com.lucaslima.vacation.application.domains.Vacation;
+import com.lucaslima.vacation.application.domains.Request;
 import com.lucaslima.vacation.application.ports.in.CalculateVacationPeriodsUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +43,7 @@ public class CalculateVacationPeriodsController {
         LocalDate startPeriod = LocalDate.parse(start, DATE_FORMATTER);
         LocalDate endPeriod = LocalDate.parse(end, DATE_FORMATTER);
 
-        VacationRequest request = VacationRequestDomainMapper.toDomain(city, state, startPeriod, endPeriod, quantityDays, slice, workDays);
+        Request request = VacationRequestDomainMapper.toDomain(city, state, startPeriod, endPeriod, quantityDays, slice, workDays);
         List<Vacation> vacations = calculateVacationPeriodsUseCase.calculate(request);
 
         return ResponseEntity.ok(new DataWrapper(CalculateVacationPeriodsMapper.toListDto(vacations)));

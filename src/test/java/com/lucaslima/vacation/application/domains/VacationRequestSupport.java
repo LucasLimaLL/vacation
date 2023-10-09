@@ -1,4 +1,4 @@
-package com.lucaslima.vacation.application.domains.periods;
+package com.lucaslima.vacation.application.domains;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -7,8 +7,8 @@ import java.util.List;
 
 public class VacationRequestSupport {
 
-    public static VacationRequest.VacationRequestBuilder get() {
-        return VacationRequest
+    public static Request.RequestBuilder get() {
+        return Request
                 .builder()
                 .withCity(City.builder().withName("SAO PAULO").withState(State.SP).build())
                 .withStart(LocalDate.now().plus(1, ChronoUnit.MONTHS))
