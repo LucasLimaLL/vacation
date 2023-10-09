@@ -28,11 +28,15 @@ jobs:
       - name: Build and Install
         run: mvn install
 
-      - name: Create Pull Request
+      - name: Get Branch Name
+        id: branch-base
+        run: echo "A branch atual é ${GITHUB_REF#refs/heads/}"
+
+      - name: Criar PR
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          target: develop
-          head: ${{ github.ref }}
-          title: "Feature Release from ${{ github.ref }}"
-          body: "Automated feature release from ${{ github.ref }}"
+          branch: ${{ steps.branch-base.outputs.result }}
+          base: develop
+          title: Título do Pull Request
+          body: Descrição do Pull Request
