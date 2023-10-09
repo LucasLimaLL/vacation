@@ -1,3 +1,0 @@
-curl --request GET \
-  --url 'http://localhost:8080/vacation?cidade=SaoPaulo&estado=SP&inicio_periodo=2023-09-01&fim_periodo=2024-07-10&qtd_dias=25&valor_divisao=2&dias_trabalho=1&dias_trabalho=2&dias_trabalho=3&dias_trabalho=4&dias_trabalho=5&dias_trabalho=6' \
-  --header 'accept: */*'
