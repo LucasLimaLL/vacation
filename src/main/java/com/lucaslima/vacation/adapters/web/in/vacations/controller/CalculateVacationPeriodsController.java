@@ -8,6 +8,7 @@ import com.lucaslima.vacation.adapters.web.in.vacations.dto.mapper.VacationReque
 import com.lucaslima.vacation.application.domains.Vacation;
 import com.lucaslima.vacation.application.domains.Request;
 import com.lucaslima.vacation.application.ports.in.CalculateVacationPeriodsUseCase;
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CalculateVacationPeriodsController {
 
+    private static final int DEFAULT_DAYS = 30;
+    private static final int DEFAULT_SLICE = 1;
     private final CalculateVacationPeriodsUseCase calculateVacationPeriodsUseCase;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -40,10 +43,10 @@ public class CalculateVacationPeriodsController {
             @RequestParam(name = "valor_divisao") int slice,
             @RequestParam(name = "dias_trabalho") List<Integer> workDays
     ) {
-        LocalDate startPeriod = LocalDate.parse(start, DATE_FORMATTER);
-        LocalDate endPeriod = LocalDate.parse(end, DATE_FORMATTER);
+        LocalDate startPeriod = StringUtils.isBlank(start) ? LocalDate.now().plusDays(1) : LocalDate.parse(start, DATE_FORMATTER);
+        LocalDate endPeriod = StringUtils.isBlank(end) ? LocalDate.now().plusYears(1) : LocalDate.parse(end, DATE_FORMATTER);
 
-        Request request = VacationRequestDomainMapper.toDomain(city, state, startPeriod, endPeriod, quantityDays, slice, workDays);
+        Request request = VacationRequestDomainMapper.toDomain(city, state, startPeriod, endPeriod, quantityDays == 0 ? DEFAULT_DAYS : quantityDays, slice == 0 ? DEFAULT_SLICE : slice, workDays);
         List<Vacation> vacations = calculateVacationPeriodsUseCase.calculate(request);
 
         return ResponseEntity.ok(new DataWrapper(CalculateVacationPeriodsMapper.toListDto(vacations)));
