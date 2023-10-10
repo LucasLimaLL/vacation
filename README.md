@@ -21,6 +21,7 @@ curl --request GET \
 --header 'accept: */*'
 
 
+
 Resultados: Após inserir todos os parâmetros, clique em "Calcular" ou botão equivalente. Em seguida, você verá uma lista de melhores períodos de férias, cada um acompanhado por uma explicação dos motivos por trás da recomendação.
 
 Exploração Adicional: Sinta-se à vontade para ajustar diferentes parâmetros e ver como isso afeta os resultados. Você pode experimentar com datas diferentes, orçamentos variados e destinos alternativos para encontrar a combinação perfeita.
